@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Como devo pagar? — Simulador</title>
+  <style>
+    :root{
+      --bg:#0e0f13; --card:#171923; --muted:#8a8fa3; --text:#eef1f8; --acc:#4f8cff; --ok:#1db954; --warn:#ffb020; --danger:#ff5a5f;
+      --input:#10131a; --border:#262a36;
+    }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:500 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial}
+    header{padding:18px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:linear-gradient(180deg,var(--bg),rgba(14,15,19,.92));backdrop-filter:saturate(1.2) blur(6px)}
+    h1{margin:0;font-size:18px} .sub{color:var(--muted);font-size:13px;margin-top:4px}
+    main{padding:16px;max-width:960px;margin:0 auto}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    @media (min-width:780px){.grid{grid-template-columns:1fr 1fr}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+    .card h2{margin:0 0 10px 0;font-size:16px}
+    .row{display:grid;grid-template-columns:1fr 140px;gap:10px;align-items:center;margin:8px 0}
+    label{font-size:13px;color:var(--muted)}
+    input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--input);color:var(--text);font-weight:600;}
+    input:focus{outline:2px solid var(--acc);border-color:transparent}
+    .hint{font-size:12px;color:var(--muted)}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#0c1222;border:1px solid var(--border);font-size:12px;color:var(--muted)}
+    .result{font-size:28px;font-weight:800}
+    .tag{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+    .kpi{display:flex;align-items:baseline;gap:8px;margin-top:6px}
+    .ok{color:var(--ok)} .warn{color:var(--warn)} .danger{color:var(--danger)}
+    .muted{color:var(--muted)}
+    .stack{display:flex;gap:8px;flex-wrap:wrap}
+    .foot{margin-top:18px;color:var(--muted);font-size:12px}
+    .btn{appearance:none;border:1px solid var(--border);background:var(--input);color:var(--text);padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+    .btn:focus{outline:2px solid var(--acc);}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Simulador — Como devo pagar?</h1>
+    <div class="sub">PIX × Cartão (à vista/parcelado) + Auto‑financiamento</div>
+  </header>
+
+  <main>
+    <!-- Bloco 1: Entradas -->
+    <section class="grid">
+      <div class="card">
+        <h2>Entradas</h2>
+        <div class="row"><label>Valor da compra (R$)</label><input id="valor" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+        <div class="row"><label>Desconto PIX (%)</label><input id="descPix" type="number" min="0" max="100" step="0.01" placeholder="ex.: 5"/></div>
+        <div class="row"><label>Desconto à vista no cartão (%)</label><input id="descAvista" type="number" min="0" max="100" step="0.01" placeholder="ex.: 0"/></div>
+        <div class="row"><label>Parcelas sem juros (nº)</label><input id="parcelas" type="number" min="1" step="1" placeholder="ex.: 6"/></div>
+        <div class="row"><label>Cashback no cartão (%)</label><input id="cashback" type="number" min="0" max="100" step="0.01" value="1.65"/></div>
+        <div class="row"><label>Dia de fechamento (1–31)</label><input id="fechamento" type="number" min="1" max="31" step="1" value="20"/></div>
+        <div class="row"><label>Dia de vencimento (1–31)</label><input id="vencimento" type="number" min="1" max="31" step="1" value="27"/></div>
+      </div>
+    </section>
+
+    <!-- Bloco 2: Resultados -->
+    <section class="grid" style="margin-top:12px">
+      <div class="card">
+        <h2>Resultados</h2>
+        <div class="stack">
+          <span class="pill"><span class="tag">Hoje</span> <span id="hoje" class="mono"></span></span>
+          <span class="pill"><span class="tag">Fecha</span> <span id="fecha" class="mono"></span></span>
+          <span class="pill"><span class="tag">Vence</span> <span id="vence" class="mono"></span></span>
+          <span class="pill"><span class="tag">Dias até pagar</span> <span id="diasAte" class="mono"></span></span>
+          <span class="pill"><span class="tag">Taxa mensal líquida</span> <span id="taxaMensal" class="mono"></span></span>
+          <span class="pill"><span class="tag">Taxa diária</span> <span id="taxaDiaria" class="mono"></span></span>
+        </div>
+        <div class="kpi"><div class="tag">Como devo pagar?</div></div>
+        <div id="melhor" class="result ok">—</div>
+
+        <div class="grid" style="margin-top:12px">
+          <div class="card">
+            <div class="tag">PIX (valor real)</div>
+            <div id="pixReal" class="result">—</div>
+          </div>
+          <div class="card">
+            <div class="tag">Cartão à vista (valor real)</div>
+            <div id="avistaReal" class="result">—</div>
+          </div>
+          <div class="card">
+            <div class="tag">Cartão parcelado (valor presente)</div>
+            <div id="parceladoReal" class="result">—</div>
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top:12px">
+          <div class="card">
+            <div class="tag">Quanto pedir de desconto para pagar no PIX</div>
+            <div id="descNecPix" class="result warn">—</div>
+          </div>
+          <div class="card">
+            <div class="tag">Quanto pedir de desconto para pagar à vista</div>
+            <div id="descNecAvista" class="result warn">—</div>
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top:12px">
+          <div class="card">
+            <div class="tag">Valor para me pagar por mês (auto‑financiamento)</div>
+            <div id="pmtAuto" class="result">—</div>
+          </div>
+          <div class="card">
+            <div class="tag">Qtd de parcelas para o valor desejado</div>
+            <div id="nperAuto" class="result">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Mini calculadora</h2>
+        <div class="row"><label>Preço base atual (R$)</label><input id="precoBase" type="number" min="0" step="0.01" placeholder="usa o valor da compra por padrão"/></div>
+        <div class="row"><label>Valor com desconto (H1) — R$</label><input id="h1" type="number" min="0" step="0.01" placeholder="0,00"/></div>
+        <div class="row"><label>Desconto equivalente (H2) — %</label><input id="h2" type="text" disabled/></div>
+        <hr style="border:0;border-top:1px solid var(--border);margin:12px 0"/>
+        <div class="row"><label>Valor de cashback (H4) — R$</label><input id="h4" type="number" min="0" step="0.01" placeholder="0,00"/></div>
+        <div class="row"><label>Cashback equivalente (H5) — %</label><input id="h5" type="text" disabled/></div>
+      </div>
+    </section>
+
+    <!-- Bloco 3: Parâmetros financeiros -->
+    <section class="grid" style="margin-top:12px">
+      <div class="card">
+        <h2>Parâmetros financeiros (pré‑preenchidos)</h2>
+        <div class="row"><label>CDI (ao ano, %)</label><input id="cdi" type="number" step="0.01" value="15.00"/></div>
+        <div class="row"><label>% do CDI do banco</label><input id="pctCdiBanco" type="number" step="0.01" value="100"/></div>
+        <div class="row"><label>IR (alíquota, %)</label><input id="ir" type="number" step="0.01" value="22.5"/></div>
+        <div class="row"><label>Auto‑financiamento — nº de parcelas</label><input id="nAuto" type="number" min="0" step="1" value="0"/></div>
+        <div class="row"><label>Valor desejado por mês (R$)</label><input id="pmtDesejado" type="number" min="0" step="0.01" value="0"/></div>
+        <div class="hint">O cálculo usa <b>CDI conservador fixo</b> de 0,10% a.a. (não editável).</div>
+      </div>
+    </section>
+
+    <div class="foot">v0.6 — Página única, sem backend. Salve como <b>index.html</b> e publique no GitHub Pages.</div>
+  </main>
+
+  <script>
+    const fmtBRL = v => (isFinite(v)? v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) : '—');
+    const fmtPct = v => (isFinite(v)? (100*v).toFixed(2).replace('.',',')+'%' : '—');
+
+    const el = id => document.getElementById(id);
+
+    const inputs = ['valor','descPix','descAvista','parcelas','cashback','fechamento','vencimento','cdi','pctCdiBanco','ir','nAuto','pmtDesejado','precoBase','h1','h4'];
+    inputs.forEach(i=> { const node = el(i); if(node) node.addEventListener('input', calc); });
+
+    function safeNum(n){ const x = parseFloat(n); return isFinite(x)? x : 0; }
+    function daysInMonth(y,m){ return new Date(y, m+1, 0).getDate(); }
+
+    function proxData(dia){
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = now.getMonth();
+      const dHoje = now.getDate();
+      const thisDay = Math.min(dia, daysInMonth(y,m));
+      if(dHoje <= dia){ return new Date(y, m, thisDay); }
+      const nextMonth = m+1;
+      return new Date(y, nextMonth, Math.min(dia, daysInMonth(y,nextMonth)));
+    }
+
+    function diffDias(a,b){ // b - a
+      const d1 = new Date(a.getFullYear(),a.getMonth(),a.getDate(),12);
+      const d2 = new Date(b.getFullYear(),b.getMonth(),b.getDate(),12);
+      const ms = d2 - d1; // 12h para evitar DST
+      return Math.max(0, Math.round(ms/86400000));
+    }
+
+    function pmt(rate, nper, pv, fv=0, type=0){
+      if(nper<=0) return NaN;
+      if(rate === 0) return -(pv+fv)/nper;
+      const r1 = Math.pow(1+rate, nper);
+      return -(rate*(pv*r1 + fv)) / ((1+rate*type)*(r1-1));
+    }
+    function nperSolve(rate, pmtVal, pv, fv=0, type=0){
+      if(!isFinite(rate) || rate<0 || !isFinite(pmtVal) || pmtVal===0) return NaN;
+      if(pv<=0) return NaN;
+      const typeAdj = (1+rate*type);
+      const f = (n)=> pv + pmtVal*typeAdj*(1 - Math.pow(1+rate, -n))/rate + fv*Math.pow(1+rate, -n);
+      let lo=1, hi=600; while(f(hi)>0 && hi<2000) hi*=2;
+      for(let i=0;i<100;i++){
+        const mid = (lo+hi)/2; const val = f(mid);
+        if(Math.abs(val) < 1e-8) return mid;
+        if(val>0) lo=mid; else hi=mid;
+      }
+      return Math.ceil((lo+hi)/2);
+    }
+
+    function calc(){
+      const valor = safeNum(el('valor').value);
+      const precoBase = el('precoBase').value? safeNum(el('precoBase').value): valor;
+      el('precoBase').placeholder = valor? valor.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) : 'usa o valor da compra por padrão';
+
+      const descPix = safeNum(el('descPix').value)/100;
+      const descAvista = safeNum(el('descAvista').value)/100;
+      const cashback = safeNum(el('cashback').value)/100; // só no cartão
+      const nParcelas = Math.max(1, Math.floor(safeNum(el('parcelas').value))||0);
+      const diaFech = Math.min(31, Math.max(1, Math.floor(safeNum(el('fechamento').value)||20)));
+      const diaVenc = Math.min(31, Math.max(1, Math.floor(safeNum(el('vencimento').value)||27)));
+
+      // Parâmetros anuais
+      const cdiAnnual = safeNum(el('cdi').value)/100; // ao ano
+      const pctCdiBanco = safeNum(el('pctCdiBanco').value)/100; // 100% etc
+      const ir = safeNum(el('ir').value)/100;
+      const cdiConservador = 0.001; // 0,10% a.a.
+
+      // Taxas equivalentes
+      const effAnnual = Math.max(0, (cdiAnnual - cdiConservador) * pctCdiBanco * (1 - ir));
+      const taxaMensal = Math.pow(1 + effAnnual, 1/12) - 1;
+      const taxaDiaria = Math.pow(1 + taxaMensal, 1/30) - 1;
+
+      const hoje = new Date();
+      const fecha = proxData(diaFech);
+      const vence = proxData(diaVenc);
+      const diasAtePagar = diffDias(hoje, vence);
+
+      // PIX (imediato)
+      const pixReal = valor * (1 - descPix);
+
+      // Cartão à vista (traz a PV e aplica cashback/descAvista)
+      const avistaPV = valor * (1 - descAvista) * (1 - cashback) / Math.pow(1+taxaDiaria, diasAtePagar);
+
+      // Cartão parcelado: PV das parcelas menos PV do cashback na fatura
+      const parcela = valor / nParcelas;
+      let pvParcelas = 0;
+      for(let k=0;k<nParcelas;k++){
+        const dias = diasAtePagar + 30*k;
+        pvParcelas += parcela / Math.pow(1+taxaDiaria, dias);
+      }
+      const pvCashback = (cashback>0)? (valor * cashback) / Math.pow(1+taxaDiaria, diasAtePagar) : 0;
+      let parceladoPV = pvParcelas - pvCashback;
+
+      // Força igualdade numérica quando é 1 parcela e sem desc. à vista
+      if(nParcelas===1 && descAvista===0){ parceladoPV = avistaPV; }
+
+      // Decisão
+      const melhorVal = Math.min(pixReal, avistaPV, parceladoPV);
+      const melhor = (melhorVal===pixReal)? 'PAGUE NO PIX' : (melhorVal===avistaPV? 'CARTÃO À VISTA' : 'PARCELADO');
+
+      // Descontos necessários (equivalentes aos seus E5/E6)
+      const descNecPix = valor>0? 1 - (Math.min(avistaPV, parceladoPV) / valor) : NaN;
+      const descNecAvista = valor>0? 1 - (Math.min(pixReal, parceladoPV) / valor) : NaN;
+
+      // Auto‑financiamento
+      const nAuto = Math.max(0, Math.floor(safeNum(el('nAuto').value)||0));
+      const custoRef = melhorVal; // usa o menor custo como PV
+      const pmtMes = (nAuto>0 && custoRef>0)? pmt(taxaMensal, nAuto, -custoRef) : NaN;
+      const pmtDesejado = safeNum(el('pmtDesejado').value);
+      const nperCalc = (pmtDesejado>0 && custoRef>0)? Math.ceil( nperSolve(taxaMensal, -pmtDesejado, custoRef) ) : NaN;
+
+      // Mini calculadora
+      const h1 = safeNum(el('h1').value);
+      const h2 = (precoBase>0 && h1>0)? (1 - h1/precoBase) : 0; el('h2').value = fmtPct(h2);
+      const h4 = safeNum(el('h4').value);
+      const h5 = (precoBase>0 && h4>=0)? (h4/precoBase) : 0; el('h5').value = fmtPct(h5);
+
+      // Render
+      el('hoje').textContent = hoje.toLocaleDateString('pt-BR');
+      el('fecha').textContent = fecha.toLocaleDateString('pt-BR');
+      el('vence').textContent = vence.toLocaleDateString('pt-BR');
+      el('diasAte').textContent = diasAtePagar + ' d';
+      el('taxaMensal').textContent = fmtPct(taxaMensal);
+      el('taxaDiaria').textContent = fmtPct(taxaDiaria);
+
+      el('pixReal').textContent = fmtBRL(pixReal);
+      el('avistaReal').textContent = fmtBRL(avistaPV);
+      el('parceladoReal').textContent = fmtBRL(parceladoPV);
+
+      el('melhor').textContent = melhor;
+      el('descNecPix').textContent = isFinite(descNecPix)? ((descNecPix<0? '-':'') + (100*Math.abs(descNecPix)).toFixed(2).replace('.',',') + '%') : '—';
+      el('descNecAvista').textContent = isFinite(descNecAvista)? ((descNecAvista<0? '-':'') + (100*Math.abs(descNecAvista)).toFixed(2).replace('.',',') + '%') : '—';
+
+      el('pmtAuto').textContent = isFinite(pmtMes)? fmtBRL(pmtMes) : '—';
+      el('nperAuto').textContent = (isFinite(nperCalc) && nperCalc>0)? nperCalc+' meses' : '—';
+    }
+
+    // Inicializa
+    calc();
+  </script>
+</body>
+</html>
