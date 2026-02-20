@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Escolha Certa — Como devo pagar?</title>
+  <title>Escolha Certa</title>
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
@@ -18,48 +18,305 @@
 
   <!-- Fallback favicon -->
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0e0f13; --card:#171923; --muted:#8a8fa3; --text:#eef1f8; --acc:#4f8cff; --ok:#1db954; --warn:#ffb020; --danger:#ff5a5f;
-      --input:#10131a; --border:#262a36;
+      --bg:#080808;
+      --surface:#111111;
+      --surface2:#181818;
+      --border:#222222;
+      --border2:#2a2a2a;
+      --text:#f0f0f0;
+      --text2:#888888;
+      --text3:#555555;
+      --acc:#f5c518;
+      --acc-dim:#f5c51822;
+      --ok:#22c55e;
+      --ok-dim:#22c55e18;
+      --warn:#f5c518;
+      --danger:#ef4444;
+      --input:#0d0d0d;
+      --radius:10px;
+      --radius-lg:14px;
     }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:500 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial}
-    header{padding:18px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:linear-gradient(180deg,var(--bg),rgba(14,15,19,.92));backdrop-filter:saturate(1.2) blur(6px)}
-    h1{margin:0;font-size:18px} .sub{color:var(--muted);font-size:13px;margin-top:4px}
-    main{padding:16px;max-width:960px;margin:0 auto}
-    .grid{display:grid;grid-template-columns:1fr;gap:12px}
-    @media (min-width:780px){.grid{grid-template-columns:1fr 1fr}}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
-    .card h2{margin:0 0 10px 0;font-size:16px}
-    .row{display:grid;grid-template-columns:1fr 140px;gap:10px;align-items:center;margin:8px 0}
-    label{font-size:13px;color:var(--muted)}
-    input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--input);color:var(--text);font-weight:600;}
-    input:focus{outline:2px solid var(--acc);border-color:transparent}
-    .hint{font-size:12px;color:var(--muted)}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#0c1222;border:1px solid var(--border);font-size:12px;color:var(--muted)}
-    .result{font-size:28px;font-weight:800}
-    .tag{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-    .kpi{display:flex;align-items:baseline;gap:8px;margin-top:6px}
-    .ok{color:var(--ok)} .warn{color:var(--warn)} .danger{color:var(--danger)}
-    .muted{color:var(--muted)}
-    .stack{display:flex;gap:8px;flex-wrap:wrap}
-    .foot{margin-top:18px;color:var(--muted);font-size:12px}
-    .btn{appearance:none;border:1px solid var(--border);background:var(--input);color:var(--text);padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700}
-    .btn:focus{outline:2px solid var(--acc);}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:'DM Sans', sans-serif;
+      font-size:15px;
+      font-weight:400;
+      line-height:1.5;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* ── HEADER ── */
+    header{
+      padding:20px 20px 16px;
+      border-bottom:1px solid var(--border);
+      position:sticky;top:0;z-index:100;
+      background:rgba(8,8,8,.92);
+      backdrop-filter:blur(12px);
+      text-align:center;
+    }
+    h1{
+      margin:0;
+      font-size:20px;
+      font-weight:700;
+      letter-spacing:-.01em;
+      color:var(--text);
+    }
+    h1 span{color:var(--acc)}
+    .sub{
+      color:var(--text3);
+      font-size:12px;
+      margin-top:3px;
+      letter-spacing:.02em;
+      text-transform:uppercase;
+    }
+
+    /* ── LAYOUT ── */
+    main{padding:0;max-width:960px;margin:0 auto;text-align:center}
+    .stack-blocks{
+      display:flex;flex-direction:column;
+      align-items:center;gap:1px;
+      padding:0 0 32px;
+    }
+
+    /* ── CARD ── */
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius-lg);
+      padding:18px 16px;
+      text-align:left;
+      width:100%;max-width:560px;
+    }
+    .card .card{
+      background:var(--surface2);
+      border-color:var(--border2);
+      border-radius:var(--radius);
+      padding:14px;
+      width:100%;max-width:100%;
+    }
+
+    /* ── BLOCK HEADER ── */
+    .block-title{
+      text-align:center;
+      font-size:15px;
+      font-weight:600;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--text2);
+      padding:18px 0 14px;
+      width:100%;max-width:560px;
+    }
+
+    /* ── SECTION HEADING (colapsável) ── */
+    .section-head{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      cursor:pointer;user-select:none;
+      font-size:11px;font-weight:600;
+      letter-spacing:.12em;text-transform:uppercase;
+      color:var(--text3);
+      margin-bottom:14px;
+    }
+    .section-head:hover{color:var(--text2)}
+    .section-icon{
+      width:20px;height:20px;border-radius:50%;
+      background:var(--surface2);border:1px solid var(--border2);
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:700;color:var(--text3);
+      flex-shrink:0;transition:all .2s;
+    }
+    .section-head:hover .section-icon{border-color:var(--acc);color:var(--acc)}
+
+    /* ── GRID DE RESULTADOS ── */
+    .grid{display:grid;grid-template-columns:1fr;gap:8px}
+    @media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+
+    /* ── RESULTADO PRINCIPAL ── */
+    .decisor-answer{
+      text-align:center;
+      font-size:32px;
+      font-weight:700;
+      color:var(--ok);
+      letter-spacing:-.02em;
+      padding:8px 0 16px;
+    }
+    .decisor-label{
+      text-align:center;
+      font-size:10px;
+      font-weight:600;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--text3);
+      margin-bottom:2px;
+    }
+
+    /* ── RESULTADO CARD ── */
+    .result{
+      font-size:22px;font-weight:700;
+      text-align:center;
+      font-family:'DM Mono', monospace;
+      color:var(--text);
+      margin-top:4px;
+    }
+    .result.ok{color:var(--ok)}
+    .result.warn{color:var(--acc)}
+
+    .tag{
+      font-size:10px;font-weight:600;
+      text-transform:uppercase;letter-spacing:.1em;
+      color:var(--text3);text-align:center;
+    }
+
+    /* ── INPUTS ── */
+    .row{
+      display:grid;grid-template-columns:1fr 148px;
+      gap:10px;align-items:center;margin:10px 0;
+    }
+    label{
+      font-size:14px;font-weight:500;
+      color:var(--text2);
+    }
+    input{
+      width:100%;
+      padding:10px 12px;
+      border-radius:var(--radius);
+      border:1px solid var(--border2);
+      background:var(--input);
+      color:var(--text);
+      font-family:'DM Sans',sans-serif;
+      font-size:15px;
+      font-weight:600;
+      transition:border-color .15s;
+      -webkit-appearance:none;
+    }
+    input:focus{outline:none;border-color:var(--acc)}
+    input::placeholder{color:var(--text3);font-weight:400}
+    input:disabled{opacity:.4;cursor:not-allowed}
+
+    .input-wrap{position:relative;display:flex;align-items:center;width:148px}
+    .input-wrap .prefix,.input-wrap .suffix{
+      position:absolute;
+      color:var(--text3);font-size:13px;font-weight:600;
+      pointer-events:none;z-index:1;
+    }
+    .input-wrap .prefix{left:10px}
+    .input-wrap .suffix{right:10px}
+    .input-wrap input{width:100%}
+    .input-wrap.has-prefix input{padding-left:26px}
+    .input-wrap.has-suffix input{padding-right:24px}
+
+    /* ── TOGGLE SWITCH ── */
+    .toggle-row{
+      display:grid;grid-template-columns:1fr auto 148px;
+      gap:10px;align-items:center;margin:10px 0;
+    }
+    .toggle-switch{
+      display:flex;align-items:center;gap:6px;
+      font-size:11px;font-weight:700;
+      white-space:nowrap;
+    }
+    .toggle-switch .lbl-pct{color:var(--acc)}
+    .toggle-switch .lbl-brl{color:var(--text3)}
+    .toggle-switch.is-brl .lbl-pct{color:var(--text3)}
+    .toggle-switch.is-brl .lbl-brl{color:var(--acc)}
+
+    .sw-track{
+      position:relative;width:38px;height:22px;
+      border-radius:999px;
+      background:var(--border2);
+      cursor:pointer;
+      transition:background .2s;
+      flex-shrink:0;
+    }
+    .sw-track.on{background:var(--acc)}
+    .sw-knob{
+      position:absolute;top:3px;left:3px;
+      width:16px;height:16px;border-radius:50%;
+      background:#fff;
+      transition:transform .2s;
+      box-shadow:0 1px 4px rgba(0,0,0,.5);
+    }
+    .sw-track.on .sw-knob{transform:translateX(16px)}
+
+    /* ── TOGGLE MODO (auto-fin) ── */
+    .mode-toggle{
+      display:flex;align-items:center;justify-content:center;
+      gap:10px;margin-bottom:16px;
+      font-size:12px;font-weight:600;
+    }
+
+    /* ── DIVISOR ── */
+    hr{border:0;border-top:1px solid var(--border);margin:14px 0}
+
+    /* ── HINT ── */
+    .hint{
+      font-size:11px;color:var(--text3);
+      text-align:center;margin-top:10px;
+      line-height:1.6;
+    }
+
+    /* ── PILLS ── */
+    .stack{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+    .pill{
+      display:inline-block;padding:4px 10px;
+      border-radius:999px;
+      background:var(--surface2);
+      border:1px solid var(--border2);
+      font-size:11px;color:var(--text3);
+    }
+
+    /* ── FOOT ── */
+    .foot{
+      margin-top:24px;padding-bottom:24px;
+      color:var(--text3);font-size:11px;
+      text-align:center;letter-spacing:.04em;
+    }
+
+    /* ── MONO ── */
+    .mono{font-family:'DM Mono',monospace}
+
+    /* ── INSTALL BANNER ── */
     .install-banner{
-      display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
-      background:var(--card);border:1px solid var(--acc);border-radius:14px;
+      display:none;position:fixed;bottom:16px;left:50%;
+      transform:translateX(-50%);
+      background:var(--surface);
+      border:1px solid var(--acc);
+      border-radius:var(--radius-lg);
       padding:12px 16px;gap:10px;align-items:center;z-index:999;
-      box-shadow:0 4px 24px rgba(0,0,0,.6);max-width:360px;width:calc(100% - 32px);
+      box-shadow:0 8px 32px rgba(0,0,0,.8);
+      max-width:360px;width:calc(100% - 32px);
       font-size:13px;
     }
-    .install-banner .ico{font-size:24px}
-    .install-banner .txt{flex:1;line-height:1.3}
-    .install-banner .txt b{display:block}
-    .install-banner .txt span{color:var(--muted)}
-    .btn-acc{background:var(--acc);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px}
-    .btn-x{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px;line-height:1}
+    .install-banner .ico{font-size:22px}
+    .install-banner .txt{flex:1;line-height:1.4}
+    .install-banner .txt b{display:block;color:var(--text)}
+    .install-banner .txt span{color:var(--text3);font-size:12px}
+    .btn-acc{
+      background:var(--acc);color:#000;border:none;
+      padding:8px 14px;border-radius:8px;
+      cursor:pointer;font-weight:700;font-size:12px;
+      font-family:'DM Sans',sans-serif;
+      white-space:nowrap;
+    }
+    .btn-acc:active{opacity:.85}
+    .btn-x{
+      background:transparent;border:none;
+      color:var(--text3);cursor:pointer;
+      font-size:18px;padding:0 4px;line-height:1;
+    }
+
+    /* ── ANIMAÇÃO DE ENTRADA ── */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .card{animation:fadeUp .3s ease both}
   </style>
 </head>
 <body>
@@ -75,30 +332,66 @@
   </div>
 
   <header>
-    <h1>Escolha Certa</h1>
-    <div class="sub">PIX × Cartão (à vista/parcelado) + Auto‑financiamento</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px">
+      <img src="icon-192.png" alt="Escolha Certa" style="width:40px;height:40px;border-radius:10px;flex-shrink:0" onerror="this.style.display='none'"/>
+      <div>
+        <h1><span>Escolha</span> Certa</h1>
+        <div class="sub">PIX · Cartão · Auto‑financiamento</div>
+      </div>
+    </div>
   </header>
 
   <main>
-    <!-- Bloco 1: Entradas -->
-    <section class="grid">
-      <div class="card">
-        <h2>Entradas</h2>
-        <div class="row"><label>Valor da compra (R$)</label><input id="valor" type="number" min="0" step="0.01" placeholder="0,00" /></div>
-        <div class="row"><label>Desconto PIX (%)</label><input id="descPix" type="number" min="0" max="100" step="0.01" placeholder="ex.: 5"/></div>
-        <div class="row"><label>Desconto à vista no cartão (%)</label><input id="descAvista" type="number" min="0" max="100" step="0.01" placeholder="ex.: 0"/></div>
-        <div class="row"><label>Parcelas sem juros (nº)</label><input id="parcelas" type="number" min="1" step="1" placeholder="ex.: 6"/></div>
-        <div class="row"><label>Cashback no cartão (%)</label><input id="cashback" type="number" min="0" max="100" step="0.01" value="1.65"/></div>
-        <div class="row"><label>Dia de fechamento (1–31)</label><input id="fechamento" type="number" min="1" max="31" step="1" value="06"/></div>
-        <div class="row"><label>Dia de vencimento (1–31)</label><input id="vencimento" type="number" min="1" max="31" step="1" value="13"/></div>
-      </div>
-    </section>
+    <div class="stack-blocks">
 
-    <!-- Bloco 2: Resultados -->
-    <section class="grid" style="margin-top:12px">
-      <div class="card">
-        <h2>Resultados</h2>
-        <div class="stack">
+      <!-- Compra -->
+      <div class="block-title">Compra</div>
+      <div class="card" style="width:100%;max-width:560px">
+        <div class="row"><label>Valor da compra</label><div class="input-wrap has-prefix"><span class="prefix">R$</span><input id="valor" type="text" inputmode="decimal" placeholder="0,00" /></div></div>
+        <div class="toggle-row">
+          <label id="lblDescPix">Desconto PIX</label>
+          <div class="toggle-switch" id="toggleDescPix">
+            <span class="lbl-pct">%</span>
+            <div class="sw-track" id="swTrackDescPix"><div class="sw-knob"></div></div>
+            <span class="lbl-brl">R$</span>
+          </div>
+          <div class="input-wrap has-suffix" id="wrapDescPixPct"><input id="descPix" type="text" inputmode="decimal" placeholder="ex.: 5"/><span class="suffix">%</span></div>
+          <div class="input-wrap has-prefix" id="wrapDescPixBrl" style="display:none"><span class="prefix">R$</span><input id="descPixBrl" type="text" inputmode="decimal" placeholder="0,00"/></div>
+        </div>
+        <div id="pctDescPix" style="display:none;text-align:right;font-size:12px;color:var(--acc);margin:-6px 0 8px;font-weight:700"></div>
+
+        <div class="toggle-row">
+          <label id="lblDescAvista">Desconto à vista no cartão</label>
+          <div class="toggle-switch" id="toggleDescAvista">
+            <span class="lbl-pct">%</span>
+            <div class="sw-track" id="swTrackDescAvista"><div class="sw-knob"></div></div>
+            <span class="lbl-brl">R$</span>
+          </div>
+          <div class="input-wrap has-suffix" id="wrapDescAvistaPct"><input id="descAvista" type="text" inputmode="decimal" placeholder="ex.: 0"/><span class="suffix">%</span></div>
+          <div class="input-wrap has-prefix" id="wrapDescAvistaBrl" style="display:none"><span class="prefix">R$</span><input id="descAvistaBrl" type="text" inputmode="decimal" placeholder="0,00"/></div>
+        </div>
+        <div id="pctDescAvista" style="display:none;text-align:right;font-size:12px;color:var(--acc);margin:-6px 0 8px;font-weight:700"></div>
+
+        <div class="row"><label>Parcelas sem juros (nº)</label><div class="input-wrap"><input id="parcelas" type="number" min="1" step="1" placeholder="ex.: 6"/></div></div>
+        <div class="toggle-row">
+          <label>Cashback do cartão</label>
+          <div class="toggle-switch" id="toggleCashback">
+            <span class="lbl-pct">%</span>
+            <div class="sw-track" id="swTrackCashback"><div class="sw-knob"></div></div>
+            <span class="lbl-brl">R$</span>
+          </div>
+          <div class="input-wrap has-suffix" id="wrapCashbackPct"><input id="cashback" type="text" inputmode="decimal" value="1,65"/><span class="suffix">%</span></div>
+          <div class="input-wrap has-prefix" id="wrapCashbackBrl" style="display:none"><span class="prefix">R$</span><input id="cashbackBrl" type="text" inputmode="decimal" placeholder="0,00"/></div>
+        </div>
+        <div id="pctCashback" style="display:none;text-align:right;font-size:12px;color:var(--acc);margin:-6px 0 8px;font-weight:700"></div>
+        <div class="row"><label>Dia de fechamento (1–31)</label><div class="input-wrap"><input id="fechamento" type="number" min="1" max="31" step="1" value="06"/></div></div>
+        <div class="row"><label>Dia de vencimento (1–31)</label><div class="input-wrap"><input id="vencimento" type="number" min="1" max="31" step="1" value="13"/></div></div>
+      </div>
+
+      <!-- Decisor -->
+      <div class="block-title">Decisor</div>
+      <div class="card" style="width:100%;max-width:560px">
+        <div class="stack" style="display:none">
           <span class="pill"><span class="tag">Hoje</span> <span id="hoje" class="mono"></span></span>
           <span class="pill"><span class="tag">Fecha</span> <span id="fecha" class="mono"></span></span>
           <span class="pill"><span class="tag">Vence</span> <span id="vence" class="mono"></span></span>
@@ -106,72 +399,72 @@
           <span class="pill"><span class="tag">Taxa mensal líquida</span> <span id="taxaMensal" class="mono"></span></span>
           <span class="pill"><span class="tag">Taxa diária</span> <span id="taxaDiaria" class="mono"></span></span>
         </div>
-        <div class="kpi"><div class="tag">Como devo pagar?</div></div>
-        <div id="melhor" class="result ok">—</div>
-
-        <div class="grid" style="margin-top:12px">
-          <div class="card">
-            <div class="tag">PIX (valor real)</div>
-            <div id="pixReal" class="result">—</div>
-          </div>
-          <div class="card">
-            <div class="tag">Cartão à vista (valor real)</div>
-            <div id="avistaReal" class="result">—</div>
-          </div>
-          <div class="card">
-            <div class="tag">Cartão parcelado (valor presente)</div>
-            <div id="parceladoReal" class="result">—</div>
-          </div>
+        <div class="decisor-label">Como devo pagar?</div>
+        <div id="melhor" class="decisor-answer">—</div>
+        <div class="grid" style="margin-top:8px">
+          <div class="card"><div class="tag">PIX (valor real)</div><div id="pixReal" class="result">—</div></div>
+          <div class="card"><div class="tag">Cartão à vista (valor real)</div><div id="avistaReal" class="result">—</div></div>
+          <div class="card"><div class="tag">Cartão parcelado (valor presente)</div><div id="parceladoReal" class="result">—</div></div>
         </div>
-
-        <div class="grid" style="margin-top:12px">
-          <div class="card">
-            <div class="tag">Quanto pedir de desconto para pagar no PIX</div>
-            <div id="descNecPix" class="result warn">—</div>
-          </div>
-          <div class="card">
-            <div class="tag">Quanto pedir de desconto para pagar à vista</div>
-            <div id="descNecAvista" class="result warn">—</div>
-          </div>
-        </div>
-
-        <div class="grid" style="margin-top:12px">
-          <div class="card">
-            <div class="tag">Valor para me pagar por mês (auto‑financiamento)</div>
-            <div id="pmtAuto" class="result">—</div>
-          </div>
-          <div class="card">
-            <div class="tag">Qtd de parcelas para o valor desejado</div>
-            <div id="nperAuto" class="result">—</div>
-          </div>
+        <div class="grid" style="margin-top:8px">
+          <div class="card"><div class="tag">Desconto mínimo para PIX valer</div><div id="descNecPix" class="result warn">—</div></div>
+          <div class="card"><div class="tag">Desconto mínimo para à vista valer</div><div id="descNecAvista" class="result warn">—</div></div>
         </div>
       </div>
 
-      <div class="card">
-        <h2>Mini calculadora</h2>
-        <div class="row"><label>Preço base atual (R$)</label><input id="precoBase" type="number" min="0" step="0.01" placeholder="usa o valor da compra por padrão"/></div>
-        <div class="row"><label>Valor com desconto (H1) — R$</label><input id="h1" type="number" min="0" step="0.01" placeholder="0,00"/></div>
-        <div class="row"><label>Desconto equivalente (H2) — %</label><input id="h2" type="text" disabled/></div>
-        <hr style="border:0;border-top:1px solid var(--border);margin:12px 0"/>
-        <div class="row"><label>Valor de cashback (H4) — R$</label><input id="h4" type="number" min="0" step="0.01" placeholder="0,00"/></div>
-        <div class="row"><label>Cashback equivalente (H5) — %</label><input id="h5" type="text" disabled/></div>
-      </div>
-    </section>
+      <!-- Auto-Financiamento -->
+      <div class="block-title">Auto-Financiamento</div>
+      <div class="card" style="width:100%;max-width:560px">
+        <div class="section-head" id="toggleAutoFin">
+          Auto-Financiamento
+          <span class="section-icon" id="iconAutoFin">+</span>
+        </div>
+        <div id="bodyAutoFin" style="display:none">
 
-    <!-- Bloco 3: Parâmetros financeiros -->
-    <section class="grid" style="margin-top:12px">
-      <div class="card">
-        <h2>Parâmetros financeiros (pré‑preenchidos)</h2>
-        <div class="row"><label>CDI (ao ano, %)</label><input id="cdi" type="number" step="0.01" value="15.00"/></div>
-        <div class="row"><label>% do CDI do banco</label><input id="pctCdiBanco" type="number" step="0.01" value="100"/></div>
-        <div class="row"><label>IR (alíquota, %)</label><input id="ir" type="number" step="0.01" value="22.5"/></div>
-        <div class="row"><label>Auto‑financiamento — nº de parcelas</label><input id="nAuto" type="number" min="0" step="1" value="0"/></div>
-        <div class="row"><label>Valor desejado por mês (R$)</label><input id="pmtDesejado" type="number" min="0" step="0.01" value="0"/></div>
-        <div class="hint">O cálculo usa <b>CDI conservador fixo</b> de 0,10% a.a. (não editável).</div>
-      </div>
-    </section>
+          <!-- Toggle modo: nº parcelas / valor máximo -->
+          <div class="mode-toggle">
+            <span id="lblModoNper" style="color:var(--acc)">Nº de parcelas</span>
+            <div class="sw-track" id="swModoAuto"><div class="sw-knob"></div></div>
+            <span id="lblModoValor" style="color:var(--text3)">Valor máximo/mês</span>
+          </div>
 
-    <div class="foot">v0.6 — Página única, sem backend. Salve como <b>index.html</b> e publique no GitHub Pages.</div>
+          <!-- Modo: nº de parcelas -->
+          <div id="modoNper">
+            <div class="row"><label>nº de parcelas</label><div class="input-wrap"><input id="nAuto" type="number" min="0" step="1" value="0"/></div></div>
+            <div class="card" style="margin-top:8px"><div class="tag">Valor para me pagar por mês</div><div id="pmtAuto" class="result">—</div></div>
+            <div class="card" style="margin-top:8px"><div class="tag">Total</div><div id="pmtTotal" class="result">—</div></div>
+            <div class="card" style="margin-top:8px"><div class="tag">Taxa</div><div id="pmtTaxa" class="result warn">—</div></div>
+          </div>
+
+          <!-- Modo: valor máximo por mês -->
+          <div id="modoValor" style="display:none">
+            <div class="row"><label>Valor máximo que desejo pagar por mês</label><div class="input-wrap has-prefix"><span class="prefix">R$</span><input id="pmtDesejado" type="text" inputmode="decimal" value="0"/></div></div>
+            <div class="card" style="margin-top:8px"><div class="tag">Qtd de parcelas sugerida</div><div id="nperAuto" class="result">—</div></div>
+            <div class="card" style="margin-top:8px"><div class="tag">Parcela sugerida</div><div id="nperParcela" class="result">—</div></div>
+            <div class="card" style="margin-top:8px"><div class="tag">Total</div><div id="nperTotal" class="result">—</div></div>
+            <div class="card" style="margin-top:8px"><div class="tag">Taxa</div><div id="nperTaxa" class="result warn">—</div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Parâmetros financeiros -->
+      <div class="block-title">Configurações</div>
+      <div class="card" style="width:100%;max-width:560px">
+        <div class="section-head" id="toggleParams">
+          Parâmetros financeiros
+          <span class="section-icon" id="iconParams">+</span>
+        </div>
+        <div id="bodyParams" style="display:none">
+          <div class="row"><label>CDI (ao ano)</label><div class="input-wrap has-suffix"><input id="cdi" type="text" inputmode="decimal" value="15,00"/><span class="suffix">%</span></div></div>
+          <div class="row"><label>% do CDI do banco</label><div class="input-wrap has-suffix"><input id="pctCdiBanco" type="text" inputmode="decimal" value="100"/><span class="suffix">%</span></div></div>
+          <div class="row"><label>IR (alíquota)</label><div class="input-wrap has-suffix"><input id="ir" type="text" inputmode="decimal" value="22,5"/><span class="suffix">%</span></div></div>
+          <div class="hint">CDI conservador fixo de 0,10% a.a. incluso no cálculo.</div>
+        </div>
+      </div>
+
+      <div class="foot">Criado e compartilhado por Rafael</div>
+    </div>
   </main>
 
   <script>
@@ -180,10 +473,80 @@
 
     const el = id => document.getElementById(id);
 
-    const inputs = ['valor','descPix','descAvista','parcelas','cashback','fechamento','vencimento','cdi','pctCdiBanco','ir','nAuto','pmtDesejado','precoBase','h1','h4'];
-    inputs.forEach(i=> { const node = el(i); if(node) node.addEventListener('input', calc); });
+    // Converte string com vírgula para número
+    function safeNum(n){
+      if(typeof n === 'string') n = n.replace(/\./g,'').replace(',','.');
+      const x = parseFloat(n);
+      return isFinite(x)? x : 0;
+    }
 
-    function safeNum(n){ const x = parseFloat(n); return isFinite(x)? x : 0; }
+    // Máscara monetária: formata como "1.234,56"
+    function maskMoney(input){
+      let v = input.value.replace(/\D/g,'');
+      if(!v){ input.value=''; return; }
+      let num = parseInt(v, 10) / 100;
+      input.value = num.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    }
+
+    // Máscara percentual: permite até 2 decimais com vírgula
+    function maskPct(input){
+      let v = input.value.replace(/[^\d,]/g,'');
+      // permite só uma vírgula
+      let parts = v.split(',');
+      if(parts.length > 2) v = parts[0]+','+parts.slice(1).join('');
+      if(parts[1] && parts[1].length > 2) v = parts[0]+','+parts[1].substring(0,2);
+      input.value = v;
+    }
+
+    // Aplica máscaras nos campos corretos
+    const moneyFields = ['valor','pmtDesejado','descPixBrl','descAvistaBrl','cashbackBrl'];
+    const pctFields = ['descPix','descAvista','cashback','cdi','pctCdiBanco','ir'];
+
+    moneyFields.forEach(id => {
+      const node = el(id);
+      if(node) node.addEventListener('input', ()=>{ maskMoney(node); calc(); });
+    });
+    pctFields.forEach(id => {
+      const node = el(id);
+      if(node) node.addEventListener('input', ()=>{ maskPct(node); calc(); });
+    });
+
+    const otherInputs = ['parcelas','fechamento','vencimento','nAuto'];
+    otherInputs.forEach(i=>{ const node=el(i); if(node) node.addEventListener('input', calc); });
+
+    // Toggle Desconto à vista no cartão
+    let descAvistaModo = 'pct';
+    const swTrackAvista = el('swTrackDescAvista');
+    const toggleDivAvista = el('toggleDescAvista');
+    swTrackAvista.addEventListener('click', () => {
+      descAvistaModo = descAvistaModo === 'pct' ? 'brl' : 'pct';
+      const isBrl = descAvistaModo === 'brl';
+      swTrackAvista.classList.toggle('on', isBrl);
+      toggleDivAvista.classList.toggle('is-brl', isBrl);
+      el('wrapDescAvistaPct').style.display = isBrl ? 'none' : 'flex';
+      el('wrapDescAvistaBrl').style.display = isBrl ? 'flex' : 'none';
+      el('pctDescAvista').style.display = isBrl ? 'block' : 'none';
+      el('descAvista').value = '';
+      el('descAvistaBrl').value = '';
+      el('pctDescAvista').textContent = '';
+      calc();
+    });
+    let descPixModo = 'pct'; // 'pct' ou 'brl'
+    const swTrack = el('swTrackDescPix');
+    const toggleDiv = el('toggleDescPix');
+    swTrack.addEventListener('click', () => {
+      descPixModo = descPixModo === 'pct' ? 'brl' : 'pct';
+      const isBrl = descPixModo === 'brl';
+      swTrack.classList.toggle('on', isBrl);
+      toggleDiv.classList.toggle('is-brl', isBrl);
+      el('wrapDescPixPct').style.display = isBrl ? 'none' : 'flex';
+      el('wrapDescPixBrl').style.display = isBrl ? 'flex' : 'none';
+      el('pctDescPix').style.display = isBrl ? 'block' : 'none';
+      el('descPix').value = '';
+      el('descPixBrl').value = '';
+      el('pctDescPix').textContent = '';
+      calc();
+    });
     function daysInMonth(y,m){ return new Date(y, m+1, 0).getDate(); }
 
     function proxData(dia){
@@ -226,12 +589,34 @@
 
     function calc(){
       const valor = safeNum(el('valor').value);
-      const precoBase = el('precoBase').value? safeNum(el('precoBase').value): valor;
-      el('precoBase').placeholder = valor? valor.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}) : 'usa o valor da compra por padrão';
 
-      const descPix = safeNum(el('descPix').value)/100;
-      const descAvista = safeNum(el('descAvista').value)/100;
-      const cashback = safeNum(el('cashback').value)/100; // só no cartão
+      // Desconto PIX: modo % ou R$
+      let descPix = 0;
+      if(descPixModo === 'pct'){
+        descPix = safeNum(el('descPix').value)/100;
+      } else {
+        const descPixValor = safeNum(el('descPixBrl').value);
+        descPix = (valor > 0 && descPixValor > 0) ? descPixValor / valor : 0;
+        el('pctDescPix').textContent = (valor > 0 && descPixValor > 0) ? '≈ ' + (descPix*100).toFixed(2).replace('.',',') + '%' : '';
+      }
+      // Desconto à vista no cartão: modo % ou R$
+      let descAvista = 0;
+      if(descAvistaModo === 'pct'){
+        descAvista = safeNum(el('descAvista').value)/100;
+      } else {
+        const descAvistaValor = safeNum(el('descAvistaBrl').value);
+        descAvista = (valor > 0 && descAvistaValor > 0) ? descAvistaValor / valor : 0;
+        el('pctDescAvista').textContent = (valor > 0 && descAvistaValor > 0) ? '≈ ' + (descAvista*100).toFixed(2).replace('.',',') + '%' : '';
+      }
+      // Cashback: modo % ou R$
+      let cashback = 0;
+      if(cashbackModo === 'pct'){
+        cashback = safeNum(el('cashback').value)/100;
+      } else {
+        const cashbackValor = safeNum(el('cashbackBrl').value);
+        cashback = (valor > 0 && cashbackValor > 0) ? cashbackValor / valor : 0;
+        el('pctCashback').textContent = (valor > 0 && cashbackValor > 0) ? '≈ ' + (cashback*100).toFixed(2).replace('.',',') + '%' : '';
+      }
       const nParcelas = Math.max(1, Math.floor(safeNum(el('parcelas').value))||0);
       const diaFech = Math.min(31, Math.max(1, Math.floor(safeNum(el('fechamento').value)||20)));
       const diaVenc = Math.min(31, Math.max(1, Math.floor(safeNum(el('vencimento').value)||27)));
@@ -283,14 +668,11 @@
       const nAuto = Math.max(0, Math.floor(safeNum(el('nAuto').value)||0));
       const custoRef = melhorVal; // usa o menor custo como PV
       const pmtMes = (nAuto>0 && custoRef>0)? pmt(taxaMensal, nAuto, -custoRef) : NaN;
+      // Valor máximo por mês → encontra nper e recalcula parcela exata
       const pmtDesejado = safeNum(el('pmtDesejado').value);
       const nperCalc = (pmtDesejado>0 && custoRef>0)? Math.ceil( nperSolve(taxaMensal, -pmtDesejado, custoRef) ) : NaN;
-
-      // Mini calculadora
-      const h1 = safeNum(el('h1').value);
-      const h2 = (precoBase>0 && h1>0)? (1 - h1/precoBase) : 0; el('h2').value = fmtPct(h2);
-      const h4 = safeNum(el('h4').value);
-      const h5 = (precoBase>0 && h4>=0)? (h4/precoBase) : 0; el('h5').value = fmtPct(h5);
+      // Parcela exata para o nperCalc encontrado (≤ pmtDesejado)
+      const pmtExato = (isFinite(nperCalc) && nperCalc>1 && custoRef>0)? pmt(taxaMensal, nperCalc, -custoRef) : NaN;
 
       // Render
       el('hoje').textContent = hoje.toLocaleDateString('pt-BR');
@@ -302,15 +684,94 @@
 
       el('pixReal').textContent = fmtBRL(pixReal);
       el('avistaReal').textContent = fmtBRL(avistaPV);
-      el('parceladoReal').textContent = fmtBRL(parceladoPV);
+      el('parceladoReal').textContent = (nParcelas > 1) ? fmtBRL(parceladoPV) : '—';
 
       el('melhor').textContent = melhor;
       el('descNecPix').textContent = isFinite(descNecPix)? ((descNecPix<0? '-':'') + (100*Math.abs(descNecPix)).toFixed(2).replace('.',',') + '%') : '—';
       el('descNecAvista').textContent = isFinite(descNecAvista)? ((descNecAvista<0? '-':'') + (100*Math.abs(descNecAvista)).toFixed(2).replace('.',',') + '%') : '—';
 
-      el('pmtAuto').textContent = isFinite(pmtMes)? fmtBRL(pmtMes) : '—';
-      el('nperAuto').textContent = (isFinite(nperCalc) && nperCalc>0)? nperCalc+' meses' : '—';
+      const pmtTotalVal = (isFinite(pmtMes) && nAuto > 1) ? pmtMes * nAuto : NaN;
+      const pmtTaxaVal = (isFinite(pmtTotalVal) && melhorVal > 0) ? (pmtTotalVal / melhorVal - 1) : NaN;
+
+      el('pmtAuto').textContent = (isFinite(pmtMes) && nAuto > 1) ? fmtBRL(pmtMes) : '—';
+      el('pmtTotal').textContent = isFinite(pmtTotalVal) ? fmtBRL(pmtTotalVal) : '—';
+      el('pmtTaxa').textContent = isFinite(pmtTaxaVal) ? ((pmtTaxaVal * 100).toFixed(2).replace('.', ',') + '%') : '—';
+      el('nperAuto').textContent = (isFinite(nperCalc) && nperCalc>1)? nperCalc+' meses' : '—';
+      el('nperParcela').textContent = (isFinite(pmtExato) && nperCalc>1)? fmtBRL(pmtExato) : '—';
+
+      const nperTotalVal = (isFinite(pmtExato) && nperCalc > 1) ? pmtExato * nperCalc : NaN;
+      const nperTaxaVal = (isFinite(nperTotalVal) && melhorVal > 0) ? (nperTotalVal / melhorVal - 1) : NaN;
+      el('nperTotal').textContent = isFinite(nperTotalVal) ? fmtBRL(nperTotalVal) : '—';
+      el('nperTaxa').textContent = isFinite(nperTaxaVal) ? ((nperTaxaVal * 100).toFixed(2).replace('.', ',') + '%') : '—';
     }
+
+    // Toggle Cashback do cartão
+    let cashbackModo = 'pct';
+    el('swTrackCashback').addEventListener('click', () => {
+      cashbackModo = cashbackModo === 'pct' ? 'brl' : 'pct';
+      const isBrl = cashbackModo === 'brl';
+      el('swTrackCashback').classList.toggle('on', isBrl);
+      el('toggleCashback').classList.toggle('is-brl', isBrl);
+      el('wrapCashbackPct').style.display = isBrl ? 'none' : 'flex';
+      el('wrapCashbackBrl').style.display = isBrl ? 'flex' : 'none';
+      el('pctCashback').style.display = isBrl ? 'block' : 'none';
+      el('cashback').value = isBrl ? '' : '1,65';
+      el('cashbackBrl').value = '';
+      el('pctCashback').textContent = '';
+      calc();
+    });
+
+    // Toggle modo Auto-Financiamento: nº parcelas / valor máximo
+    let autoFinModo = 'nper'; // 'nper' ou 'valor'
+    el('swModoAuto').addEventListener('click', () => {
+      autoFinModo = autoFinModo === 'nper' ? 'valor' : 'nper';
+      const isValor = autoFinModo === 'valor';
+      el('swModoAuto').classList.toggle('on', isValor);
+      el('lblModoNper').style.color = isValor ? 'var(--text3)' : 'var(--acc)';
+      el('lblModoValor').style.color = isValor ? 'var(--acc)' : 'var(--text3)';
+      el('modoNper').style.display = isValor ? 'none' : '';
+      el('modoValor').style.display = isValor ? '' : 'none';
+      calc();
+    });
+
+    // Recolher/expandir Auto-Financiamento (padrão: recolhido)
+    let autoFinAberto = false;
+    el('toggleAutoFin').addEventListener('click', () => {
+      autoFinAberto = !autoFinAberto;
+      el('bodyAutoFin').style.display = autoFinAberto ? '' : 'none';
+      el('iconAutoFin').textContent = autoFinAberto ? '−' : '+';
+    });
+
+    // Recolher/expandir Parâmetros financeiros (padrão: recolhido)
+    let paramsAberto = false;
+    el('toggleParams').addEventListener('click', () => {
+      paramsAberto = !paramsAberto;
+      el('bodyParams').style.display = paramsAberto ? '' : 'none';
+      el('iconParams').textContent = paramsAberto ? '−' : '+';
+    });
+
+    // Persistência: carrega fechamento, vencimento e parâmetros financeiros salvos
+    const savedFech = localStorage.getItem('ec_fechamento');
+    const savedVenc = localStorage.getItem('ec_vencimento');
+    if(savedFech) el('fechamento').value = savedFech;
+    if(savedVenc) el('vencimento').value = savedVenc;
+
+    const savedCdi = localStorage.getItem('ec_cdi');
+    const savedPctCdi = localStorage.getItem('ec_pctCdiBanco');
+    const savedIr = localStorage.getItem('ec_ir');
+    if(savedCdi) el('cdi').value = savedCdi;
+    if(savedPctCdi) el('pctCdiBanco').value = savedPctCdi;
+    if(savedIr) el('ir').value = savedIr;
+
+    // Salva automaticamente ao alterar
+    el('fechamento').addEventListener('change', () => localStorage.setItem('ec_fechamento', el('fechamento').value));
+    el('vencimento').addEventListener('change', () => localStorage.setItem('ec_vencimento', el('vencimento').value));
+    const savedCashback = localStorage.getItem('ec_cashback');
+    if(savedCashback) el('cashback').value = savedCashback;
+
+    el('cashback').addEventListener('change', () => localStorage.setItem('ec_cashback', el('cashback').value));
+    el('pctCdiBanco').addEventListener('change', () => localStorage.setItem('ec_pctCdiBanco', el('pctCdiBanco').value));
+    el('ir').addEventListener('change', () => localStorage.setItem('ec_ir', el('ir').value));
 
     // Inicializa
     calc();
