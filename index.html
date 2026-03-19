@@ -245,6 +245,29 @@
     }
     .sw-track.on .sw-knob{transform:translateX(16px)}
 
+
+
+    /* ── DISABLED BLOCK ── */
+    .field-disabled{opacity:.3;pointer-events:none;user-select:none}
+    /* ── TRI-TOGGLE ── */
+    .tri-toggle{
+      display:flex;border-radius:8px;
+      border:1px solid var(--border2);
+      overflow:hidden;flex-shrink:0;
+    }
+    .tri-btn{
+      background:transparent;border:none;
+      padding:5px 9px;
+      font-size:10px;font-weight:700;
+      font-family:'DM Sans',sans-serif;
+      color:var(--text3);cursor:pointer;
+      letter-spacing:.04em;
+      transition:background .15s, color .15s;
+      white-space:nowrap;
+    }
+    .tri-btn+.tri-btn{border-left:1px solid var(--border2)}
+    .tri-btn.active{background:var(--acc);color:#000}
+    .tri-btn:not(.active):hover{color:var(--text2)}
     /* ── TOGGLE MODO (auto-fin) ── */
     .mode-toggle{
       display:flex;align-items:center;justify-content:center;
@@ -345,45 +368,54 @@
       <!-- Compra -->
       <div class="block-title">Compra</div>
       <div class="card" style="width:100%;max-width:560px">
-        <div class="row"><label>Valor da compra</label><div class="input-wrap has-prefix"><span class="prefix">R$</span><input id="valor" type="text" inputmode="decimal" placeholder="0,00" /></div></div>
         <div class="toggle-row">
+          <label>Valor da compra</label>
+          <div class="tri-toggle" id="toggleTipoCompra">
+            <button class="tri-btn active" data-mode="cartao" id="btnTipoCartao">💳 Cartão</button>
+            <button class="tri-btn" data-mode="pix" id="btnTipoPix">PIX</button>
+          </div>
+          <div class="input-wrap has-prefix"><span class="prefix">R$</span><input id="valor" type="text" inputmode="decimal" placeholder="0,00" /></div>
+        </div>
+        <div class="toggle-row" id="rowDescPix">
           <label id="lblDescPix">Desconto PIX</label>
-          <div class="toggle-switch" id="toggleDescPix">
-            <span class="lbl-pct">%</span>
-            <div class="sw-track" id="swTrackDescPix"><div class="sw-knob"></div></div>
-            <span class="lbl-brl">R$</span>
+          <div class="tri-toggle" id="toggleDescPix">
+            <button class="tri-btn active" data-mode="pct">%</button>
+            <button class="tri-btn" data-mode="brl">-R$</button>
+            <button class="tri-btn" data-mode="final">=R$</button>
           </div>
           <div class="input-wrap has-suffix" id="wrapDescPixPct"><input id="descPix" type="text" inputmode="decimal" placeholder="ex.: 5"/><span class="suffix">%</span></div>
           <div class="input-wrap has-prefix" id="wrapDescPixBrl" style="display:none"><span class="prefix">R$</span><input id="descPixBrl" type="text" inputmode="decimal" placeholder="0,00"/></div>
+          <div class="input-wrap has-prefix" id="wrapDescPixFinal" style="display:none"><span class="prefix">R$</span><input id="descPixFinal" type="text" inputmode="decimal" placeholder="valor final"/></div>
         </div>
         <div id="pctDescPix" style="display:none;text-align:right;font-size:12px;color:var(--acc);margin:-6px 0 8px;font-weight:700"></div>
 
-        <div class="toggle-row">
+        <div class="toggle-row" id="rowDescAvista">
           <label id="lblDescAvista">Desconto à vista no cartão</label>
-          <div class="toggle-switch" id="toggleDescAvista">
-            <span class="lbl-pct">%</span>
-            <div class="sw-track" id="swTrackDescAvista"><div class="sw-knob"></div></div>
-            <span class="lbl-brl">R$</span>
+          <div class="tri-toggle" id="toggleDescAvista">
+            <button class="tri-btn active" data-mode="pct">%</button>
+            <button class="tri-btn" data-mode="brl">-R$</button>
+            <button class="tri-btn" data-mode="final">=R$</button>
           </div>
           <div class="input-wrap has-suffix" id="wrapDescAvistaPct"><input id="descAvista" type="text" inputmode="decimal" placeholder="ex.: 0"/><span class="suffix">%</span></div>
           <div class="input-wrap has-prefix" id="wrapDescAvistaBrl" style="display:none"><span class="prefix">R$</span><input id="descAvistaBrl" type="text" inputmode="decimal" placeholder="0,00"/></div>
+          <div class="input-wrap has-prefix" id="wrapDescAvistaFinal" style="display:none"><span class="prefix">R$</span><input id="descAvistaFinal" type="text" inputmode="decimal" placeholder="valor final"/></div>
         </div>
         <div id="pctDescAvista" style="display:none;text-align:right;font-size:12px;color:var(--acc);margin:-6px 0 8px;font-weight:700"></div>
 
-        <div class="row"><label>Parcelas sem juros (nº)</label><div class="input-wrap"><input id="parcelas" type="number" min="1" step="1" placeholder="ex.: 6"/></div></div>
-        <div class="toggle-row">
+        <div class="row" id="rowParcelas"><label>Parcelas sem juros (nº)</label><div class="input-wrap"><input id="parcelas" type="number" min="1" step="1" placeholder="ex.: 6"/></div></div>
+        <div class="toggle-row" id="rowCashback">
           <label>Cashback do cartão</label>
           <div class="toggle-switch" id="toggleCashback">
             <span class="lbl-pct">%</span>
             <div class="sw-track" id="swTrackCashback"><div class="sw-knob"></div></div>
             <span class="lbl-brl">R$</span>
           </div>
-          <div class="input-wrap has-suffix" id="wrapCashbackPct"><input id="cashback" type="text" inputmode="decimal" value="1,65"/><span class="suffix">%</span></div>
+          <div class="input-wrap has-suffix" id="wrapCashbackPct"><input id="cashback" type="text" inputmode="decimal" value="1,25"/><span class="suffix">%</span></div>
           <div class="input-wrap has-prefix" id="wrapCashbackBrl" style="display:none"><span class="prefix">R$</span><input id="cashbackBrl" type="text" inputmode="decimal" placeholder="0,00"/></div>
         </div>
         <div id="pctCashback" style="display:none;text-align:right;font-size:12px;color:var(--acc);margin:-6px 0 8px;font-weight:700"></div>
-        <div class="row"><label>Dia de fechamento (1–31)</label><div class="input-wrap"><input id="fechamento" type="number" min="1" max="31" step="1" value="06"/></div></div>
-        <div class="row"><label>Dia de vencimento (1–31)</label><div class="input-wrap"><input id="vencimento" type="number" min="1" max="31" step="1" value="13"/></div></div>
+        <div class="row" id="rowFechamento"><label>Dia de fechamento (1–31)</label><div class="input-wrap"><input id="fechamento" type="number" min="1" max="31" step="1" value="06"/></div></div>
+        <div class="row" id="rowVencimento"><label>Dia de vencimento (1–31)</label><div class="input-wrap"><input id="vencimento" type="number" min="1" max="31" step="1" value="13"/></div></div>
       </div>
 
       <!-- Decisor -->
@@ -467,8 +499,8 @@
           <span class="section-icon" id="iconParams">+</span>
         </div>
         <div id="bodyParams" style="display:none">
-          <div class="row"><label>CDI (ao ano)</label><div class="input-wrap has-suffix"><input id="cdi" type="text" inputmode="decimal" value="15,00"/><span class="suffix">%</span></div></div>
-          <div class="row"><label>% do CDI do banco</label><div class="input-wrap has-suffix"><input id="pctCdiBanco" type="text" inputmode="decimal" value="100"/><span class="suffix">%</span></div></div>
+          <div class="row"><label>CDI (ao ano)</label><div class="input-wrap has-suffix"><input id="cdi" type="text" inputmode="decimal" value="14,90"/><span class="suffix">%</span></div></div>
+          <div class="row"><label>% do CDI do banco</label><div class="input-wrap has-suffix"><input id="pctCdiBanco" type="text" inputmode="decimal" value="120"/><span class="suffix">%</span></div></div>
           <div class="row"><label>IR (alíquota)</label><div class="input-wrap has-suffix"><input id="ir" type="text" inputmode="decimal" value="22,5"/><span class="suffix">%</span></div></div>
           <div class="hint">CDI conservador fixo de 0,10% a.a. incluso no cálculo.</div>
         </div>
@@ -510,7 +542,7 @@
     }
 
     // Aplica máscaras nos campos corretos
-    const moneyFields = ['valor','pmtDesejado','descPixBrl','descAvistaBrl','cashbackBrl'];
+    const moneyFields = ['valor','pmtDesejado','descPixBrl','descPixFinal','descAvistaBrl','descAvistaFinal','cashbackBrl'];
     const pctFields = ['descPix','descAvista','cashback','cdi','pctCdiBanco','ir'];
 
     moneyFields.forEach(id => {
@@ -527,34 +559,34 @@
 
     // Toggle Desconto à vista no cartão
     let descAvistaModo = 'pct';
-    const swTrackAvista = el('swTrackDescAvista');
-    const toggleDivAvista = el('toggleDescAvista');
-    swTrackAvista.addEventListener('click', () => {
-      descAvistaModo = descAvistaModo === 'pct' ? 'brl' : 'pct';
-      const isBrl = descAvistaModo === 'brl';
-      swTrackAvista.classList.toggle('on', isBrl);
-      toggleDivAvista.classList.toggle('is-brl', isBrl);
-      el('wrapDescAvistaPct').style.display = isBrl ? 'none' : 'flex';
-      el('wrapDescAvistaBrl').style.display = isBrl ? 'flex' : 'none';
-      el('pctDescAvista').style.display = isBrl ? 'block' : 'none';
+    el('toggleDescAvista').addEventListener('click', e => {
+      const btn = e.target.closest('.tri-btn');
+      if(!btn) return;
+      descAvistaModo = btn.dataset.mode;
+      el('toggleDescAvista').querySelectorAll('.tri-btn').forEach(b => b.classList.toggle('active', b===btn));
+      el('wrapDescAvistaPct').style.display   = descAvistaModo === 'pct'   ? 'flex' : 'none';
+      el('wrapDescAvistaBrl').style.display   = descAvistaModo === 'brl'   ? 'flex' : 'none';
+      el('wrapDescAvistaFinal').style.display = descAvistaModo === 'final' ? 'flex' : 'none';
+      el('pctDescAvista').style.display = descAvistaModo !== 'pct' ? 'block' : 'none';
       el('descAvista').value = '';
       el('descAvistaBrl').value = '';
+      el('descAvistaFinal').value = '';
       el('pctDescAvista').textContent = '';
       calc();
     });
-    let descPixModo = 'pct'; // 'pct' ou 'brl'
-    const swTrack = el('swTrackDescPix');
-    const toggleDiv = el('toggleDescPix');
-    swTrack.addEventListener('click', () => {
-      descPixModo = descPixModo === 'pct' ? 'brl' : 'pct';
-      const isBrl = descPixModo === 'brl';
-      swTrack.classList.toggle('on', isBrl);
-      toggleDiv.classList.toggle('is-brl', isBrl);
-      el('wrapDescPixPct').style.display = isBrl ? 'none' : 'flex';
-      el('wrapDescPixBrl').style.display = isBrl ? 'flex' : 'none';
-      el('pctDescPix').style.display = isBrl ? 'block' : 'none';
+    let descPixModo = 'pct'; // 'pct', 'brl' ou 'final'
+    el('toggleDescPix').addEventListener('click', e => {
+      const btn = e.target.closest('.tri-btn');
+      if(!btn) return;
+      descPixModo = btn.dataset.mode;
+      el('toggleDescPix').querySelectorAll('.tri-btn').forEach(b => b.classList.toggle('active', b===btn));
+      el('wrapDescPixPct').style.display   = descPixModo === 'pct'   ? 'flex' : 'none';
+      el('wrapDescPixBrl').style.display   = descPixModo === 'brl'   ? 'flex' : 'none';
+      el('wrapDescPixFinal').style.display = descPixModo === 'final' ? 'flex' : 'none';
+      el('pctDescPix').style.display = descPixModo !== 'pct' ? 'block' : 'none';
       el('descPix').value = '';
       el('descPixBrl').value = '';
+      el('descPixFinal').value = '';
       el('pctDescPix').textContent = '';
       calc();
     });
@@ -598,26 +630,79 @@
       return Math.ceil((lo+hi)/2);
     }
 
+
+    // Toggle tipo de compra: cartão ou PIX only
+    let tipoCompra = 'cartao';
+    const camposCartao = ['wrapDescPix','wrapDescPixPct','wrapDescPixBrl','wrapDescPixFinal',
+      'pctDescPix','toggleDescPix'];
+    const camposCartaoOnly = ['toggleDescAvista','wrapDescAvistaPct','wrapDescAvistaBrl',
+      'wrapDescAvistaFinal','pctDescAvista','parcelas','fechamento','vencimento'];
+
+    function setTipoCompra(modo){
+      tipoCompra = modo;
+      el('toggleTipoCompra').querySelectorAll('.tri-btn')
+        .forEach(b => b.classList.toggle('active', b.dataset.mode === modo));
+
+      const isPix = modo === 'pix';
+
+      // campos que se desabilitam no PIX only
+      const todosDesabilitados = [
+        'descPix','descPixBrl','descPixFinal',
+        'descAvista','descAvistaBrl','descAvistaFinal',
+        'parcelas','fechamento','vencimento','cashback','cashbackBrl'
+      ];
+      todosDesabilitados.forEach(id => {
+        const node = el(id);
+        if(node) node.disabled = isPix;
+      });
+
+      // visual: wrap rows completos
+      const rowsDesabilitadas = [
+        'rowDescPix','rowDescAvista','rowParcelas',
+        'rowCashback','rowFechamento','rowVencimento'
+      ];
+      rowsDesabilitadas.forEach(id => {
+        const node = el(id);
+        if(node) node.classList.toggle('field-disabled', isPix);
+      });
+
+      calc();
+    }
+
+    el('toggleTipoCompra').addEventListener('click', e => {
+      const btn = e.target.closest('.tri-btn');
+      if(!btn) return;
+      setTipoCompra(btn.dataset.mode);
+    });
+
     function calc(){
       const valor = safeNum(el('valor').value);
 
-      // Desconto PIX: modo % ou R$
+      // Desconto PIX: modo %, R$ desconto ou R$ valor final
       let descPix = 0;
       if(descPixModo === 'pct'){
         descPix = safeNum(el('descPix').value)/100;
-      } else {
+      } else if(descPixModo === 'brl'){
         const descPixValor = safeNum(el('descPixBrl').value);
         descPix = (valor > 0 && descPixValor > 0) ? descPixValor / valor : 0;
         el('pctDescPix').textContent = (valor > 0 && descPixValor > 0) ? '≈ ' + (descPix*100).toFixed(2).replace('.',',') + '%' : '';
+      } else {
+        const finalPix = safeNum(el('descPixFinal').value);
+        descPix = (valor > 0 && finalPix > 0 && finalPix < valor) ? (valor - finalPix) / valor : 0;
+        el('pctDescPix').textContent = (valor > 0 && finalPix > 0 && finalPix < valor) ? '≈ ' + (descPix*100).toFixed(2).replace('.',',') + '% de desconto' : '';
       }
-      // Desconto à vista no cartão: modo % ou R$
+      // Desconto à vista no cartão: modo %, R$ desconto ou R$ valor final
       let descAvista = 0;
       if(descAvistaModo === 'pct'){
         descAvista = safeNum(el('descAvista').value)/100;
-      } else {
+      } else if(descAvistaModo === 'brl'){
         const descAvistaValor = safeNum(el('descAvistaBrl').value);
         descAvista = (valor > 0 && descAvistaValor > 0) ? descAvistaValor / valor : 0;
         el('pctDescAvista').textContent = (valor > 0 && descAvistaValor > 0) ? '≈ ' + (descAvista*100).toFixed(2).replace('.',',') + '%' : '';
+      } else {
+        const finalAvista = safeNum(el('descAvistaFinal').value);
+        descAvista = (valor > 0 && finalAvista > 0 && finalAvista < valor) ? (valor - finalAvista) / valor : 0;
+        el('pctDescAvista').textContent = (valor > 0 && finalAvista > 0 && finalAvista < valor) ? '≈ ' + (descAvista*100).toFixed(2).replace('.',',') + '% de desconto' : '';
       }
       // Cashback: modo % ou R$
       let cashback = 0;
@@ -677,7 +762,7 @@
 
       // Auto‑financiamento
       const nAuto = Math.max(0, Math.floor(safeNum(el('nAuto').value)||0));
-      const custoRef = melhorVal; // usa o menor custo como PV
+      const custoRef = tipoCompra === 'pix' ? pixReal : melhorVal; // usa o menor custo como PV
       const pmtMes = (nAuto>0 && custoRef>0)? pmt(taxaMensal, nAuto, -custoRef) : NaN;
       // Valor máximo por mês → encontra nper e recalcula parcela exata
       const pmtDesejado = safeNum(el('pmtDesejado').value);
@@ -694,10 +779,15 @@
       el('taxaDiaria').textContent = fmtPct(taxaDiaria);
 
       el('pixReal').textContent = fmtBRL(pixReal);
-      el('avistaReal').textContent = fmtBRL(avistaPV);
-      el('parceladoReal').textContent = (nParcelas > 1) ? fmtBRL(parceladoPV) : '—';
-
-      el('melhor').textContent = melhor;
+      if(tipoCompra === 'pix'){
+        el('avistaReal').textContent = '—';
+        el('parceladoReal').textContent = '—';
+        el('melhor').textContent = 'PAGUE NO PIX';
+      } else {
+        el('avistaReal').textContent = fmtBRL(avistaPV);
+        el('parceladoReal').textContent = (nParcelas > 1) ? fmtBRL(parceladoPV) : '—';
+        el('melhor').textContent = melhor;
+      }
 
       // Negociação: arredonda % sempre para cima (2 casas) e calcula valor com desconto
       function fmtDescNec(desc, valorBase) {
@@ -715,10 +805,17 @@
 
       const necPix = fmtDescNec(descNecPix, valor);
       const necAvista = fmtDescNec(descNecAvista, valor);
-      el('descNecPix').textContent = necPix.pct;
-      el('descNecPixValor').textContent = necPix.val;
-      el('descNecAvista').textContent = necAvista.pct;
-      el('descNecAvistaValor').textContent = necAvista.val;
+      if(tipoCompra === 'pix'){
+        el('descNecPix').textContent = '—';
+        el('descNecPixValor').textContent = '—';
+        el('descNecAvista').textContent = '—';
+        el('descNecAvistaValor').textContent = '—';
+      } else {
+        el('descNecPix').textContent = necPix.pct;
+        el('descNecPixValor').textContent = necPix.val;
+        el('descNecAvista').textContent = necAvista.pct;
+        el('descNecAvistaValor').textContent = necAvista.val;
+      }
 
       const pmtTotalVal = (isFinite(pmtMes) && nAuto > 1) ? pmtMes * nAuto : NaN;
       const pmtTaxaVal = (isFinite(pmtTotalVal) && melhorVal > 0) ? (pmtTotalVal / melhorVal - 1) : NaN;
@@ -745,7 +842,7 @@
       el('wrapCashbackPct').style.display = isBrl ? 'none' : 'flex';
       el('wrapCashbackBrl').style.display = isBrl ? 'flex' : 'none';
       el('pctCashback').style.display = isBrl ? 'block' : 'none';
-      el('cashback').value = isBrl ? '' : '1,65';
+      el('cashback').value = isBrl ? '' : '1,25';
       el('cashbackBrl').value = '';
       el('pctCashback').textContent = '';
       calc();
