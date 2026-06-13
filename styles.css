@@ -1,0 +1,318 @@
+:root{
+  --bg:#080808;
+  --surface:#111111;
+  --surface2:#181818;
+  --border:#222222;
+  --border2:#2a2a2a;
+  --text:#f0f0f0;
+  --text2:#888888;
+  --text3:#555555;
+  --acc:#f5c518;
+  --acc-dim:#f5c51822;
+  --ok:#22c55e;
+  --ok-dim:#22c55e18;
+  --warn:#f5c518;
+  --danger:#ef4444;
+  --input:#0d0d0d;
+  --radius:10px;
+  --radius-lg:14px;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans', sans-serif;
+  font-size:15px;
+  font-weight:400;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── HEADER ── */
+header{
+  padding:20px 20px 16px;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,8,8,.92);
+  backdrop-filter:blur(12px);
+  text-align:center;
+}
+h1{
+  margin:0;
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:-.01em;
+  color:var(--text);
+}
+h1 span{color:var(--acc)}
+.sub{
+  color:var(--text3);
+  font-size:12px;
+  margin-top:3px;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+}
+
+/* ── LAYOUT ── */
+main{padding:0;max-width:960px;margin:0 auto;text-align:center}
+.stack-blocks{
+  display:flex;flex-direction:column;
+  align-items:center;gap:1px;
+  padding:0 0 32px;
+}
+
+/* ── CARD ── */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:18px 16px;
+  text-align:left;
+  width:100%;max-width:560px;
+}
+.card .card{
+  background:var(--surface2);
+  border-color:var(--border2);
+  border-radius:var(--radius);
+  padding:14px;
+  width:100%;max-width:100%;
+}
+
+/* ── BLOCK HEADER ── */
+.block-title{
+  text-align:center;
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text2);
+  padding:18px 0 14px;
+  width:100%;max-width:560px;
+}
+
+/* ── SECTION HEADING (colapsável) ── */
+.section-head{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  cursor:pointer;user-select:none;
+  font-size:11px;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:14px;
+}
+.section-head:hover{color:var(--text2)}
+.section-icon{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--surface2);border:1px solid var(--border2);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--text3);
+  flex-shrink:0;transition:all .2s;
+}
+.section-head:hover .section-icon{border-color:var(--acc);color:var(--acc)}
+
+/* ── GRID DE RESULTADOS ── */
+.grid{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+
+/* ── RESULTADO PRINCIPAL ── */
+.decisor-answer{
+  text-align:center;
+  font-size:32px;
+  font-weight:700;
+  color:var(--ok);
+  letter-spacing:-.02em;
+  padding:8px 0 16px;
+}
+.decisor-label{
+  text-align:center;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:2px;
+}
+
+/* ── RESULTADO CARD ── */
+.result{
+  font-size:22px;font-weight:700;
+  text-align:center;
+  font-family:'DM Mono', monospace;
+  color:var(--text);
+  margin-top:4px;
+}
+.result.ok{color:var(--ok)}
+.result.warn{color:var(--acc)}
+
+.tag{
+  font-size:10px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:var(--text3);text-align:center;
+}
+
+/* ── INPUTS ── */
+.row{
+  display:grid;grid-template-columns:1fr 148px;
+  gap:10px;align-items:center;margin:10px 0;
+}
+label{
+  font-size:14px;font-weight:500;
+  color:var(--text2);
+}
+input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:var(--radius);
+  border:1px solid var(--border2);
+  background:var(--input);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  font-weight:600;
+  transition:border-color .15s;
+  -webkit-appearance:none;
+}
+input:focus{outline:none;border-color:var(--acc)}
+input::placeholder{color:var(--text3);font-weight:400}
+input:disabled{opacity:.4;cursor:not-allowed}
+
+.input-wrap{position:relative;display:flex;align-items:center;width:148px}
+.input-wrap .prefix,.input-wrap .suffix{
+  position:absolute;
+  color:var(--text3);font-size:13px;font-weight:600;
+  pointer-events:none;z-index:1;
+}
+.input-wrap .prefix{left:10px}
+.input-wrap .suffix{right:10px}
+.input-wrap input{width:100%}
+.input-wrap.has-prefix input{padding-left:26px}
+.input-wrap.has-suffix input{padding-right:24px}
+
+/* ── TOGGLE SWITCH ── */
+.toggle-row{
+  display:grid;grid-template-columns:1fr auto 148px;
+  gap:10px;align-items:center;margin:10px 0;
+}
+.toggle-switch{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;
+  white-space:nowrap;
+}
+.toggle-switch .lbl-pct{color:var(--acc)}
+.toggle-switch .lbl-brl{color:var(--text3)}
+.toggle-switch.is-brl .lbl-pct{color:var(--text3)}
+.toggle-switch.is-brl .lbl-brl{color:var(--acc)}
+
+.sw-track{
+  position:relative;width:38px;height:22px;
+  border-radius:999px;
+  background:var(--border2);
+  cursor:pointer;
+  transition:background .2s;
+  flex-shrink:0;
+}
+.sw-track.on{background:var(--acc)}
+.sw-knob{
+  position:absolute;top:3px;left:3px;
+  width:16px;height:16px;border-radius:50%;
+  background:#fff;
+  transition:transform .2s;
+  box-shadow:0 1px 4px rgba(0,0,0,.5);
+}
+.sw-track.on .sw-knob{transform:translateX(16px)}
+
+
+
+/* ── DISABLED BLOCK ── */
+.field-disabled{opacity:.3;pointer-events:none;user-select:none}
+/* ── TRI-TOGGLE ── */
+.tri-toggle{
+  display:flex;border-radius:8px;
+  border:1px solid var(--border2);
+  overflow:hidden;flex-shrink:0;
+}
+.tri-btn{
+  background:transparent;border:none;
+  padding:5px 9px;
+  font-size:10px;font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  color:var(--text3);cursor:pointer;
+  letter-spacing:.04em;
+  transition:background .15s, color .15s;
+  white-space:nowrap;
+}
+.tri-btn+.tri-btn{border-left:1px solid var(--border2)}
+.tri-btn.active{background:var(--acc);color:#000}
+.tri-btn:not(.active):hover{color:var(--text2)}
+/* ── TOGGLE MODO (auto-fin) ── */
+.mode-toggle{
+  display:flex;align-items:center;justify-content:center;
+  gap:10px;margin-bottom:16px;
+  font-size:12px;font-weight:600;
+}
+
+/* ── DIVISOR ── */
+hr{border:0;border-top:1px solid var(--border);margin:14px 0}
+
+/* ── HINT ── */
+.hint{
+  font-size:11px;color:var(--text3);
+  text-align:center;margin-top:10px;
+  line-height:1.6;
+}
+
+/* ── PILLS ── */
+.stack{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.pill{
+  display:inline-block;padding:4px 10px;
+  border-radius:999px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  font-size:11px;color:var(--text3);
+}
+
+/* ── FOOT ── */
+.foot{
+  margin-top:24px;padding-bottom:24px;
+  color:var(--text3);font-size:11px;
+  text-align:center;letter-spacing:.04em;
+}
+
+/* ── MONO ── */
+.mono{font-family:'DM Mono',monospace}
+
+/* ── INSTALL BANNER ── */
+.install-banner{
+  display:none;position:fixed;bottom:16px;left:50%;
+  transform:translateX(-50%);
+  background:var(--surface);
+  border:1px solid var(--acc);
+  border-radius:var(--radius-lg);
+  padding:12px 16px;gap:10px;align-items:center;z-index:999;
+  box-shadow:0 8px 32px rgba(0,0,0,.8);
+  max-width:360px;width:calc(100% - 32px);
+  font-size:13px;
+}
+.install-banner .ico{font-size:22px}
+.install-banner .txt{flex:1;line-height:1.4}
+.install-banner .txt b{display:block;color:var(--text)}
+.install-banner .txt span{color:var(--text3);font-size:12px}
+.btn-acc{
+  background:var(--acc);color:#000;border:none;
+  padding:8px 14px;border-radius:8px;
+  cursor:pointer;font-weight:700;font-size:12px;
+  font-family:'DM Sans',sans-serif;
+  white-space:nowrap;
+}
+.btn-acc:active{opacity:.85}
+.btn-x{
+  background:transparent;border:none;
+  color:var(--text3);cursor:pointer;
+  font-size:18px;padding:0 4px;line-height:1;
+}
+
+/* ── ANIMAÇÃO DE ENTRADA ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fadeUp .3s ease both}

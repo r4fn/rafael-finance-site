@@ -6,7 +6,12 @@
 ## 🗂️ Estrutura dos arquivos
 
 ```
-├── index.html      ← Aplicação principal
+├── index.html      ← Estrutura (markup) da aplicação
+├── styles.css      ← Todo o estilo (CSS)
+├── js/
+│   ├── finance.js  ← Funções puras: formatação, datas e matemática financeira
+│   ├── app.js      ← Interface: máscaras, toggles, cálculo (calc) e persistência
+│   └── pwa.js      ← Service worker + banner "Adicionar à tela inicial"
 ├── manifest.json   ← Metadados PWA
 ├── sw.js           ← Service worker (cache offline)
 ├── icon-192.png    ← Ícone 192×192
